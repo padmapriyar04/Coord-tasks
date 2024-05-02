@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Inter:wght@100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Hmm, Wanna know the Temperature? Here it is!</h1>
+    <h2>Go Ahead,Choose a Date:)</h2>
+    <div class="container">
+        <div class="select-row">
+            <div class="selectdiv1">
+                <label>
+                    <select id="month">
+                        <option selected>Month</option>
+                    </select>
+                </label>
+            </div>
+            <div class="selectdiv1">
+                <label>
+                    <select id="day">
+                        <option selected>Day</option>
+                    </select>
+                </label>
+            </div>
+            <div class="selectdiv1">
+                <label>
+                    <select id="year">
+                        <option selected>Year</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div class="button-row">
+            <button class="button-23" onclick="storeDate()">Submit</button>
+            <button class="button-23" onclick="reset()">Reset</button>
+        </div>
+        <div id="temperatureDisplay"></div>
+    </div>
+    
+    <script>
+        const months = Array.from({ length: 12 }, (_, i) => (i + 1).toString().padStart(2, '0'));
+        const days = Array.from({ length: 31 }, (_, i) => (i + 1).toString().padStart(2, '0'));
+        const years = Array.from({ length: 50 }, (_, i) => new Date().getFullYear() - i);
+
+        const monthSelect = document.getElementById("month");
+        const daySelect = document.getElementById("day");
+        const yearSelect = document.getElementById("year");
+
+        months.forEach(month => {
+            const option = document.createElement("option");
+            option.text = month;
+            monthSelect.add(option);
+        });
+
+        days.forEach(day => {
+            const option = document.createElement("option");
+            option.text = day;
+            daySelect.add(option);
+        });
+
+        years.forEach(year => {
+            const option = document.createElement("option");
+            option.text = year;
+            yearSelect.add(option);
+        });
+
+        async function requestTemp(Date) {
+            const endpoint = `https://archive-api.open-meteo.com/v1/archive?latitude=52.52&longitude=13.41&start_date=${Date}&end_date=${Date}&daily=temperature_2m_max&timezone=GMT`;
+            try {
+                const response = await fetch(endpoint);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                return data;
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        let date;
+        let response;
+        let temperature;
+        async function storeDate() {
+            const selectedMonth = monthSelect.value;
+            const selectedDay = daySelect.value;
+            const selectedYear = yearSelect.value;
+            console.log("Selected Month:", selectedMonth);
+            console.log("Selected Day:", selectedDay);
+            console.log("Selected Year:", selectedYear);
+            date = `${selectedYear}-${selectedMonth}-${selectedDay}`
+            console.log(date);
+            const response = await requestTemp(date);
+            console.log(response);
+            temperature = response.daily.temperature_2m_max[0];
+            console.log("Temperature:", temperature, "deg");
+            temperatureDisplay.textContent = `Temperature: ${temperature} deg`;
+
+        }
+
+        function reset() {
+            temperatureDisplay.textContent = "";
+            monthSelect.selectedIndex = "";
+            daySelect.selectedIndex = "";
+            yearSelect.selectedIndex = "";
+        }
+    </script>
+</body>
+
+</html>

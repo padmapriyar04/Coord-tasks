@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h1>TIC TAC TOE</h1>
+    <div class="info">
+        <input type="text" id="player1" placeholder="Player 1 Name">
+        <input type="text" id="player2" placeholder="Player 2 Name">
+        <button id="startbtn" onclick="startGame()">Start Game</button>
+        <div id="playernames"></div>
+    </div>
+    <div class="play_area">
+        <div class="row">
+            <input type="text" id="a1" class="cell" onclick="updateVal('a1'); check();" readonly>
+            <input type="text" id="a2" class="cell" onclick="updateVal('a2'); check();" readonly>
+            <input type="text" id="a3" class="cell" onclick="updateVal('a3'); check();" readonly>
+        </div>
+        <div class="row">
+            <input type="text" id="b1" class="cell" onclick="updateVal('b1'); check();" readonly>
+            <input type="text" id="b2" class="cell" onclick="updateVal('b2'); check();" readonly>
+            <input type="text" id="b3" class="cell" onclick="updateVal('b3'); check();" readonly>
+        </div>
+        <div class="row">
+            <input type="text" id="c1" class="cell" onclick="updateVal('c1'); check();" readonly>
+            <input type="text" id="c2" class="cell" onclick="updateVal('c2');check();" readonly>
+            <input type="text" id="c3" class="cell" onclick="updateVal('c3');check();" readonly>
+        </div>
+        <div id="print"> </div>
+        <button id="newRoundBtn" onclick="startNewRound()">Start New Round</button>
+        <button id="resetbtn" onclick="Reset()">Reset</button>
+    </div>
+    <script>
+
+        var cells = document.querySelectorAll('.cell');
+        cells.forEach(cell => {
+            cell.disabled = true;
+        });
+    </script>
+</body>
+
+</html>
